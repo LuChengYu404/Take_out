@@ -1,4 +1,4 @@
-[a,b,c] = imread('test_img.png');
+[a,b,c] = imread('./image/test_img.png');
 img = ind2rgb(a,b);
 imgGray = rgb2gray(img);
 % thresh = graythresh(imgGray);
