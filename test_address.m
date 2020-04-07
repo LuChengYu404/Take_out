@@ -5,10 +5,12 @@ width = 1024;
 height = 1024;
 center = 'Í©Â®ÏØ';
 zoom = 18;
-copyright = 1;
-dpiType = 'ph';
+copyright = 0;
+dpiType = 'pi';
 [a b c] = webread(API,'ak',ak,'width',width,'height',height,'center',...
     center,'zoom',zoom,'copyType',copyright,'dpiType',dpiType);
+websave('./image/b.png',API,'ak',ak,'width',width,'height',height,'center',...
+    center,'zoom',zoom,'copyType',copyright,'dpiType',dpiType)
 
 imshow(a,b)
 
