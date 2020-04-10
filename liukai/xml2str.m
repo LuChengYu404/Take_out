@@ -6,7 +6,7 @@ function str=xml2str(xml,expr,i)
     if(isempty(xmlmatch)==0)
         str=Lab2str(xmlmatch{i},expr);
     else
-        str=null;
+        str=strings(1);
     end
 end
 
