@@ -33,20 +33,23 @@ save result
 clear;
 load result
 %% xml数据获取
-page_size2num=str2double(page_size);
+page_size_num=str2double(page_size);
 syms i;
-name='<name>*?</name>';
-lat='<lat>.*?</lat>';
-lng='<lng>*?</lng>';
-address='<address>*?</address>';
-province='<province>*?</province>';
-city='<city>*?</city>';
-area='<area>*?</area>';
-telephone='<telephone>*?</telephone>';
-datail='<detail>*?</detail>';
-uid='<uid>*?</uid>';
-for i=1:page_size
-getname(i)=xml2str(result,name,i);
+getname='<name>*?</name>';
+getlat='<lat>.*?</lat>';
+getlng='<lng>*?</lng>';
+getaddress='<address>*?</address>';
+getprovince='<province>*?</province>';
+getcity='<city>*?</city>';
+getarea='<area>*?</area>';
+gettelephone='<telephone>*?</telephone>';
+getdatail='<detail>*?</detail>';
+getuid='<uid>*?</uid>';
+for i=1:page_size_num
+name=xml2str(result,getname,i)
+lat=xml2num(result,getlat,i)
+lng=xml2num(result,getlng,i)
+
 end
 %% xml2
 expr='<lat>.*?</lat>';
