@@ -15,7 +15,7 @@ imshow(a,b)
 %% 经纬度装换
 API = 'http://api.map.baidu.com/geocoding/v3';
 ak ='DhysQ5QKPqG87W7wxBv23UI8lriYq0PU';
-address = '浙江大学紫金港校区';
+address = '桐庐县';
 city= '杭州市';
 output='xml';
 result = webread(API,...
@@ -25,13 +25,12 @@ API = 'http://api.map.baidu.com/place/v2/search';
 ak ='DhysQ5QKPqG87W7wxBv23UI8lriYq0PU';
 query = '餐饮';
 radius = '10000';
-location = '30.3164123616,120.089010715';
-page_size = '20';
+location = '29.7985847901,119.697598776';
+page_size = '12';
 result = webread(API,'ak',ak,'query',query,'radius',radius,'location',location,'page_size',page_size )
 %% xml数据获取
 page_size_num=str2double(page_size); %检索得到的数据条数
-syms i;
-name=string(page_size_num);%创建店名字符数组
+name=string(page_size_num);    %创建店名字符数组
 lat=zeros(1,page_size_num);    %创建经度数组
 lng=zeros(1,page_size_num);    %创建纬度度数组
 address=string(page_size_num);
@@ -53,7 +52,8 @@ gettelephone='<telephone>.*?</telephone>';
 getdetail='<detail>.*?</detail>';
 getuid='<uid>.*?</uid>';
 
-for i=1:page_size_num
+syms i;
+for i=1:page_size_num-1
 name(i)=xml2str(result,getname,i)
 lat(i)=xml2num(result,getlat,i)
 lng(i)=xml2num(result,getlng,i)
