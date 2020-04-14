@@ -41,7 +41,7 @@ dg = connectivity_matrix; % directed graph
 %}
 
 % try without the assumption of one-way roads
-start = 259; % node global index
+start = 205; % node global index
 target = 328;
 dg = or(connectivity_matrix, connectivity_matrix.'); % make symmetric
 [route, dist] = route_planner(dg, start, target);
@@ -57,8 +57,8 @@ plot_way(ax, parsed_osm)
 %plot_way(ax, parsed_osm, map_img_filename) % if you also have a raster image
 
 plot_route(ax, route, parsed_osm)
-only_nodes = 1:10:1000; % not all nodes, to reduce graphics memory & clutter
-plot_nodes(ax, parsed_osm, only_nodes)
+only_nodes = 1:20:399; % not all nodes, to reduce graphics memory & clutter
+plot_nodes(ax, parsed_osm, only_nodes,0)
 
 % show intersection nodes (unseful, but may result into a cluttered plot)
 %plot_nodes(ax, parsed_osm, intersection_node_indices)
