@@ -12,26 +12,6 @@ markers = '蓝田学园';
     center,'zoom',zoom,'copyType',copyright,'dpiType',dpiType,...
     'markers',markers);
 imshow(a,b)
-% save
-%%
-% Load an OSM file as a MATLAB structure MAP
-map = loadosm('map (2).osm') ;
-
-% Plot highways, buildings, and other lines
-figure(1) ; clf ; hold on ; grid on ;
-hw = find([map.ways.isHighway]) ;
-bl = find([map.ways.isBuilding]) ;
-ot = setdiff(1:numel(map.ways), [hw, bl]) ;
-
-lines=geo2xy(osmgetlines(map, hw)) ; plot(lines(1,:), lines(2,:), 'b-', 'linewidth', 1.5) ;
-lines=geo2xy(osmgetlines(map, bl)) ; plot(lines(1,:), lines(2,:), 'g-', 'linewidth', 0.75) ;
-lines=geo2xy(osmgetlines(map, ot)) ; plot(lines(1,:), lines(2,:), 'k-', 'linewidth', 0.5) ;
-
-set(gca,'ydir','reverse') ;
-xlabel('Web Mercator X') ;
-ylabel('Web Mercator Y') ;
-legend('highways', 'building', 'other') ; title('OSM in MATLAB') ;
-axis equal ; box on ;
 %% 经纬度装换
 API = 'http://api.map.baidu.com/geocoding/v3';
 ak ='DhysQ5QKPqG87W7wxBv23UI8lriYq0PU';
@@ -96,3 +76,23 @@ load result
 %% xml2
 expr='<telephone>.*?</telephone>';
  xmlmatch=regexp(result,expr,'match')
+%% 生成路线图
+% Load an OSM file as a MATLAB structure MAP
+map = loadosm('map.osm') ;
+
+% Plot highways, buildings, and other lines
+figure(1) ; clf ; hold on ; grid on ;
+hw = find([map.ways.isHighway]) ;
+bl = find([map.ways.isBuilding]) ;
+ot = setdiff(1:numel(map.ways), [hw, bl]) ;
+
+lines=geo2xy(osmgetlines(map, hw)) ; plot(lines(1,:), lines(2,:), 'b-', 'linewidth', 1.5) ;
+lines=geo2xy(osmgetlines(map, bl)) ; plot(lines(1,:), lines(2,:), 'g-', 'linewidth', 0.75) ;
+lines=geo2xy(osmgetlines(map, ot)) ; plot(lines(1,:), lines(2,:), 'k-', 'linewidth', 0.5) ;
+
+set(gca,'ydir','reverse') ;
+xlabel('Web Mercator X') ;
+ylabel('Web Mercator Y') ;
+legend('highways', 'building', 'other') ; title('OSM in MATLAB') ;
+axis equal ; box on ;
+

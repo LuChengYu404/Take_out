@@ -1,5 +1,5 @@
 %% 图像初始化处理
-[a,b,c] = imread('./image/b.png');
+[a,b,c] = imread('D:\Git_project\Take_out\image\a.png');
 Image = ind2rgb(a,b);
 imshow(Image);
 GrayImage = rgb2gray(Image);

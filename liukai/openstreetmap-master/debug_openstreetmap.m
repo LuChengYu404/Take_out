@@ -13,7 +13,7 @@
 % save it as an OpenStreetMap XML Data file, selecting this from the
 % "Format to Export" options. The OSM XML is specified in:
 %   http://wiki.openstreetmap.org/wiki/.osm
-openstreetmap_filename = 'openstreetmap/genoa_small.osm';
+openstreetmap_filename = 'map.osm';
 
 %% convert XML -> MATLAB struct
 % convert the OpenStreetMap XML Data file donwloaded as map.osm
