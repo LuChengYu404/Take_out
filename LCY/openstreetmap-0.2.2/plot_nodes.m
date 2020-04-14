@@ -44,17 +44,17 @@ end
 
 % plot nodes
 xy = node_xys(:, only_node_indices);
-plotmd(ax, xy, 'yo')
+plotmd(ax, xy, 'ro')
 
 % label plots
 for i=only_node_indices
     node_id_txt = num2str(node_ids(1, i) );
     if show_id
-        curtxt = {['index=', num2str(i) ], ['id=', node_id_txt] }.';
+        curtxt = {['', num2str(i) ], ['id=', node_id_txt] }.';
     else
-        curtxt = ['index=', num2str(i) ];
+        curtxt = ['', num2str(i) ];
     end
     textmd(node_xys(:, i), curtxt, 'Parent', ax)
 end
 
-restorehold(ax, held)
+givehold(ax, held)
