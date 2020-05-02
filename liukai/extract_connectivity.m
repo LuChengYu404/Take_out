@@ -1,5 +1,5 @@
 function [connectivity_matrix, intersection_node_indices] = ...
-    extract_connectivity(parsed_osm)
+    extract_connectivity(map)
 %EXTRACT_CONNECTIVITY   extract road connectivity from parsed OpenStreetMap
 %   [connectivity_matrix, intersection_nodes] = EXTRACT_CONNECTIVITY(parsed_osm)
 %   extracts the connectivity of the road network of the OpenStreetMap
@@ -29,7 +29,8 @@ function [connectivity_matrix, intersection_node_indices] = ...
 %
 % See also PARSE_OPENSTREETMAP, PLOT_WAY.
 
-[~, node, way, ~] = assign_from_parsed(parsed_osm);
+[~, nodes, ways, ~] = assign_from_parsed(map);
+
 
 road_vals = {'motorway', 'motorway_link', 'trunk', 'trunk_link',...
              'primary', 'primary_link', 'secondary', 'secondary_link',...
@@ -38,40 +39,39 @@ road_vals = {'motorway', 'motorway_link', 'trunk', 'trunk_link',...
 
 %% connectivity
 Nsamends = 0;
-connectivity_matrix = sparse([]);     %创建一个稀疏矩阵
+connectivity_matrix = sparse([]);
 
-ways_num = size(way.id, 2);          %路的数量
-ways_node_sets = way.nd;      %每条路上节点的id的集合，元胞数组
-node_ids = node.id;           %所有节点的id
-for curway=1:ways_num         %遍历路
-    % highway?
-    [key, val] = get_way_tag_key(way.tag{1, curway} );
-    if strcmp(key, 'highway') == 0
-        continue;
-    end
-    
-    % road?
-    if isempty(ismember(road_vals, val) == 1) == 1
-        continue;
-    end
+ways_num = size(ways,2);
+ways_node_sets = ways.nds;
+node_ids = nodes.id;
+for curway=1:ways_num
+%     % highway?
+%     [key, val] = get_way_tag_key(ways.tags{1, curway} );
+%     if strcmp(key, 'highway') == 0
+%         continue;
+%     end
+%     
+%     % road?
+%     if isempty(ismember(road_vals, val) == 1) == 1
+%         continue;
+%     end
     
     % current way node set
-    nodeset = ways_node_sets{1, curway};   %现在所选的这条路上节点的id的集合，是一个元胞
-    nodes_num = size(nodeset, 2);          %现在所选的这条路上节点的数量
+    nodeset = ways(curway).nds;
+    nodes_num = size(nodeset);
     
     % first node id
-    first_node_id = nodeset(1, 1);         %现在所选的这条路上的第一个节点的id
-    node1_index = find(first_node_id == node_ids); %寻找第一个节点在所有节点的id当中下标
+    first_node_id = nodeset(1, 1);
+    node1_index = find(first_node_id == node_ids);
     
     % which other nodes connected to node1 ?
-    curway_id = way.id(1, curway);          %现在这条路的id
-    for othernode_local_index=1:nodes_num   %遍历现在这条路上所有的节点
-        othernode_id = nodeset(1, othernode_local_index); %现在这条路上某个节点的id
-        othernode_index = find(othernode_id == node_ids); %寻找某一个节点在所有节点的id当中下标
-    
+    curway_id = ways(curway).id;
+    for othernode_local_index=1:nodes_num
+        othernode_id = nodeset(1, othernode_local_index);
+        othernode_index = find(othernode_id == node_ids);
         
         % assume nodes are not connected
-        connectivity_matrix(node1_index, othernode_index) = 0; 
+        connectivity_matrix(node1_index, othernode_index) = 0;
         
         % ensure the connectivity matrix is square
         % (although it does not need be symmetric,
@@ -79,15 +79,15 @@ for curway=1:ways_num         %遍历路
         connectivity_matrix(othernode_index, node1_index) = 0;
         
         % directed graph, hence asymmetric connectivity matrix (in general)
-        for otherway=1:ways_num                  %遍历其他的路
+        for otherway=1:ways_num
             % skip same way
-            otherway_id = way.id(1, otherway);   %某一条路的id
-            if otherway_id == curway_id          %跳过现在这条路
+            otherway_id = ways(otherway).id;
+            if otherway_id == curway_id
                 continue;
             end
             
-            otherway_nodeset = ways_node_sets{1, otherway};     %某一条路上所有节点的id的集合，是一个元胞数组
-            idx = find(otherway_nodeset == othernode_id, 1);    %寻找某一条路上的节点是否与现在这条路上有重合，有则返回下标
+            otherway_nodeset = ways(otherway).nds;
+            idx = find(otherway_nodeset == othernode_id, 1);
             if isempty(idx) == 0
                 Nsamends = Nsamends +1;
                 connectivity_matrix(node1_index, othernode_index) = 1;
