@@ -78,7 +78,7 @@ for i = 1:size
     end
 end
 %% connection
-%map = loadosm('map.osm') ;
+map = loadosm('map.osm') ;
 connectivity_matrix = sparse([]);
 ways_num = size(map.ways,2);
 

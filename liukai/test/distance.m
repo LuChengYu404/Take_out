@@ -5,7 +5,8 @@ figure(1) ; clf ; hold on ; grid on ;
 hw = find([map.ways.isHighway]) ;
 
 figure(1)
-lines=geo2xy(osmgetlines(map, hw)) ; plot(lines(1,:), lines(2,:), 'b-', 'linewidth', 1.5) ;
+lines=geo2xy(osmgetlines(map, hw)) ;
+plot(lines(1,:), lines(2,:), 'b-', 'linewidth', 1.5) ;
 
 set(gca,'ydir','reverse') ;
 axis equal ; box on ;
