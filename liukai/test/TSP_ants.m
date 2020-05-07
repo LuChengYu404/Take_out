@@ -64,19 +64,10 @@ for i = 1:length(uids)
         end
     end
 end
-%%
-S = 85;
-T = 40;
-[dist, route] = graphshortestpath(dg, S, T, 'Directed', true,'Method', 'Dijkstra')
-
-% xy = geo2xy(k(2:3,route));
-% 
-% plot(xy(1,:), xy(2,:), 'g-','linewidth', 5) ;
-% hold on;
 %% 蚁群算法
 % citys= [[1304,2312];[3639,1315];[4177,2244];[3712,1399];[3488,1535];[3326,1556];[3238,1229];[4196,1004];[4312,790];[4386,570];[3007,1970];[2562,1756];[2788,1491];[2381,1676];[1332,695];[3715,1678];[3918,2179];[4061,2370];[3780,2212];[3676,2578];[4029,2838];[4263,2931];[3429,1908];[3507,2367];[3394,2643];[3439,3201];[2935,3240];[3140,3550];[2545,2357];[2778,2826];[2370,2975]];
-citys=points';
-V=[10 20 30 40 50 60];
+citys=points';%先用交叉点为例
+V=[10 20 30 40 50 60 70 80 90 100];%选六个点
 citys=citys(V,:);
 %%
 %距离
@@ -104,7 +95,7 @@ Eta = 1./D;                          % 启发函数
 Tau = ones(n,n);                     % 信息素矩阵
 Table = zeros(m,n);                  % 路径记录表
 iter = 1;                            % 迭代次数初值
-iter_max = 200;                      % 最大迭代次数
+iter_max = 1200;                      % 最大迭代次数
 Route_best = zeros(iter_max,n);      % 各代最佳路径
 Length_best = zeros(iter_max,1);     % 各代最佳路径的长度
 Length_ave = zeros(iter_max,1);      % 各代路径的平均长度
@@ -113,8 +104,16 @@ while iter <= iter_max
     % 随机产生各个蚂蚁的起点城市
       start = zeros(m,1);
       for i = 1:m
-          temp = randperm(n);
-          start(i) = temp(1);
+              begin=[1];  %指定起点
+    
+              left=2:n;%除去起点后的数组
+    
+              randIndex_left = randperm(n-1);
+              left = left(randIndex_left);%将poptemp随机排列
+
+              temp = [begin left]; 
+    
+           start(i) = 1;
       end
       Table(:,1) = start;
       % 构建解空间
